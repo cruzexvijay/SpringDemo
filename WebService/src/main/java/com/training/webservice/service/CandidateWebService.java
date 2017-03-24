@@ -16,6 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import com.google.gson.Gson;
 import com.training.spring.Factory.ApplicationFactory;
 import com.training.spring.model.Candidate;
 import com.training.spring.model.Test;
@@ -42,8 +43,7 @@ public class CandidateWebService {
 
 	@GET
 	@Path("/showAll")
-	@Produces(MediaType.APPLICATION_XML)
-	public List<Candidate> getAllCandidates() throws JAXBException, IOException, TransformerConfigurationException,
+	public Response getAllCandidates() throws JAXBException, IOException, TransformerConfigurationException,
 			ParserConfigurationException, TransformerException {
 
 		CandidateService service = factory.getCandidateService();
@@ -54,8 +54,9 @@ public class CandidateWebService {
 
 		List<Candidate> list = service.findAll();
 
-		return list;
-
+		Gson gson = new Gson();
+		String json = gson.toJson(list);
+		return Response.status(200).entity(json).build();
 	}
 
 	@GET

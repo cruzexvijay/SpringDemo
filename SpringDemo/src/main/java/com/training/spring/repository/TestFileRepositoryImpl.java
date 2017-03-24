@@ -9,13 +9,14 @@ import javax.xml.bind.JAXBException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.training.spring.Factory.ApplicationFactory;
-import com.training.spring.Factory.FileFactory;
 import com.training.spring.XmlUtil.XmlMarshallerUnmarshaller;
-import com.training.spring.model.Candidate;
 import com.training.spring.model.Test;
 import com.training.spring.model.Tests;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter @Setter
 public class TestFileRepositoryImpl implements TestRepository {
 	
 	@Autowired

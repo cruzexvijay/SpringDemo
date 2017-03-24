@@ -33,6 +33,7 @@ public class AppConfig {
 	public TestRepository getTestRepository(){
 		return new TestFileRepositoryImpl();
 	}
+	
 	@Bean(name="candidateService")
 	public CandidateService getCandidateService(){
 		return new CandidateServiceImpl();

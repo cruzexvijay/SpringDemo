@@ -15,14 +15,14 @@
 			<url>http://download.java.net/maven/2/</url>
 			<layout>default</layout>
 		</repository>
-		
+
 		<repository>
 			<id>Maven Central</id>
 			<url>http://repo1.maven.org/maven/</url>
 		</repository>
-		
+
 	</repositories>
-	
+
 
 	<dependencies>
 		<dependency>
@@ -37,7 +37,6 @@
 			<artifactId>spring-context</artifactId>
 			<version>4.3.7.RELEASE</version>
 		</dependency>
-
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>

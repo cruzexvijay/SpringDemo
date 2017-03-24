@@ -60,7 +60,10 @@ public class ApplicationFactory {
 			fac.setTestRepoFile(new File(filePath));
 			
 			log.info("LOADING BEAN CONTEXT :");
+			
 			appContext = new AnnotationConfigApplicationContext(AppConfig.class);
+			
+			
 			log.info("LOADED BEAN CONTEXT");
 			
 		} catch (FileNotFoundException e) {
