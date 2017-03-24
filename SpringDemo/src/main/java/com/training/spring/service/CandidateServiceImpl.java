@@ -58,7 +58,7 @@ public class CandidateServiceImpl implements CandidateService {
 
 
 	@Override
-	public Candidate search(String candidateId) throws JAXBException {
-		return candidateRepository.search(candidateId);
+	public Candidate search(Candidate newCandidate) throws JAXBException {
+		return candidateRepository.search(newCandidate);
 	}
 }

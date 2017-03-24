@@ -27,6 +27,9 @@ public class Candidates {
 	@XmlElement(name="Candidate", required=true)
 	private List<Candidate> candidateList=new LinkedList<>();
 	
+	
+	private int LAST_ROW_ID;
+	
 	private Candidates(){
 		
 	}
@@ -37,6 +40,17 @@ public class Candidates {
 			candidates =  new Candidates();
 		
 		return candidates;	
+	}
+	
+	public int getRowId(){
+		return ++this.LAST_ROW_ID;
+	}
+	
+	public void addNewCandidate(Candidate newCandidate){
+		if(newCandidate.getCandidateId()!=null){
+			this.LAST_ROW_ID = Integer.parseInt(newCandidate.getCandidateId());
+		}
+		this.candidateList.add(newCandidate);
 	}
 
 }

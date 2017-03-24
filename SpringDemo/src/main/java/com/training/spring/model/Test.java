@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @XmlRootElement(name="test")
 @XmlType(propOrder={"testId","candidateId","questionName","questionPath","testStartDate","feedBack","testStatus"})
+@EqualsAndHashCode(exclude={"testId"})
 public @Data class Test {
 	
 	public static final int PASS=1;
@@ -38,6 +40,7 @@ public @Data class Test {
 		return res;
 	}
 
+	
 	
 	
 }

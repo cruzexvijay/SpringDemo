@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Schedules>
+    <Schedule>
+        <Id>1</Id>
+        <candidateId>1</candidateId>
+        <Location>MBP</Location>
+        <date>2017-03-24T18:41:54.251+05:30</date>
+    </Schedule>
+    <Schedule>
+        <Id>2</Id>
+        <candidateId>2</candidateId>
+        <Location>CHN</Location>
+        <date>2017-03-24T18:41:54.251+05:30</date>
+    </Schedule>
+    <Schedule>
+        <Id>3</Id>
+        <candidateId>3</candidateId>
+        <Location>MBP</Location>
+        <date>2017-03-24T18:41:54.251+05:30</date>
+    </Schedule>
+    <Schedule>
+        <Id>1</Id>
+        <candidateId>1</candidateId>
+        <Location>MBP</Location>
+        <date>2017-03-24T18:42:04.465+05:30</date>
+    </Schedule>
+    <Schedule>
+        <Id>2</Id>
+        <candidateId>2</candidateId>
+        <Location>CHN</Location>
+        <date>2017-03-24T18:42:04.465+05:30</date>
+    </Schedule>
+    <Schedule>
+        <Id>3</Id>
+        <candidateId>3</candidateId>
+        <Location>MBP</Location>
+        <date>2017-03-24T18:42:04.465+05:30</date>
+    </Schedule>
+    <LAST_ROW_ID>3</LAST_ROW_ID>
+</Schedules>

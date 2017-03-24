@@ -36,8 +36,13 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public Test search(String testId) throws JAXBException {
-		return testRepository.search(testId);
+	public Test search(Test newTest) throws JAXBException {
+		return testRepository.search(newTest);
+	}
+
+	@Override
+	public Test findById(String testId) throws JAXBException {
+		return testRepository.findById(testId);
 	}
 	
 	

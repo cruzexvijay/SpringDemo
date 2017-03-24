@@ -59,17 +59,18 @@ public class CandidateFileRepositoryImpl implements CandidateRepository {
 		
 		if(!candidateRepoFile.exists())
 			candidateRepoFile.createNewFile();
+				
+		if(search(newCandidate)!=null)
+				return false;
 		
-		if(search(newCandidate.getCandidateId())!=null)
-			return false;
-		
-		candidates.getCandidateList().add(newCandidate);
-		
+		newCandidate.setCandidateId(candidates.getLAST_ROW_ID()+"");
+		candidates.addNewCandidate(newCandidate);
+				
 		return candidatesXmlMarshallerUnmarshaller.marshalObjectstoXml(candidates, Candidates.class,candidateRepoFile);
 	}
 
 	@Override
-	public Candidate search(String candidateId) throws JAXBException {
+	public Candidate search(Candidate newCandidate) throws JAXBException {
 		
 		Candidate result = null;
 					
@@ -78,8 +79,8 @@ public class CandidateFileRepositoryImpl implements CandidateRepository {
 		if(candidateList==null)
 			return null;
 		
-		for(Candidate c : findAll()){	
-			if(c.getCandidateId().equals(candidateId)){
+		for(Candidate c : candidateList){	
+			if(c.getCandidateId().equals(newCandidate.getCandidateId()) || c.equals(newCandidate)){
 				result = c;
 				break;
 			}	
@@ -87,6 +88,8 @@ public class CandidateFileRepositoryImpl implements CandidateRepository {
 				
 		return result;
 	}
+
+	
 	
 	
 }

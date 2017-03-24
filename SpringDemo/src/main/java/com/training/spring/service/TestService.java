@@ -16,6 +16,7 @@ public interface TestService {
 	
 	List<Test> getAllCandidateTests(String candidateId) throws JAXBException;
 	
-	Test search(String testId) throws JAXBException;
+	Test search(Test newTest) throws JAXBException;
 
+	Test findById(String testId) throws JAXBException;
 }

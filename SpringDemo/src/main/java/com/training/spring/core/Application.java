@@ -20,8 +20,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.training.spring.Factory.ApplicationFactory;
 import com.training.spring.Factory.FileFactory;
 import com.training.spring.model.Candidate;
+import com.training.spring.model.Schedule;
 import com.training.spring.model.Test;
 import com.training.spring.service.CandidateService;
+import com.training.spring.service.ScheduleService;
 import com.training.spring.service.TestService;
 
 public class Application {
@@ -35,6 +37,7 @@ public class Application {
 	
 		CandidateService service = factory.getCandidateService();
 		TestService testService = factory.getTestService();
+		ScheduleService scheduleService = factory.getScheduleService();
 		
 		for (Test t : createDummyTest())
 			testService.create(t);
@@ -45,7 +48,11 @@ public class Application {
 			service.create(c);
 
 		System.out.println(service.findAll());
-
+		
+		for(Schedule s : createDummySchedule())
+			scheduleService.create(s);
+			
+		System.out.println(scheduleService.findAllSchedules());
 	}
 
 	private static List<Test> createDummyTest() {
@@ -56,7 +63,7 @@ public class Application {
 
 		testList.add(newTest);
 
-		newTest = Test.builder().candidateId("2").testId("2").questionName("caesar cipher").questionPath("c:\\files")
+		newTest = Test.builder().candidateId("1").questionName("caesar cipher").questionPath("c:\\files")
 				.testStartDate(new Date()).feedBack("poor").testStatus(Test.FAIL).build();
 
 		testList.add(newTest);
@@ -84,5 +91,20 @@ public class Application {
 
 
 		return candidateList;
+	}
+	
+	private static List<Schedule> createDummySchedule(){
+		List<Schedule> list = new ArrayList<>();
+		
+		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").date(new Date()).build();
+		list.add(newSchedule);
+		
+		newSchedule = Schedule.builder().candidateId("2").Location("CHN").date(new Date()).build();
+		list.add(newSchedule);
+		
+		newSchedule = Schedule.builder().candidateId("3").Location("MBP").date(new Date()).build();
+		list.add(newSchedule);
+		
+		return list;
 	}
 }

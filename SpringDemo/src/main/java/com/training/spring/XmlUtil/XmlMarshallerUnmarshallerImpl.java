@@ -29,8 +29,8 @@ public class XmlMarshallerUnmarshallerImpl<T> implements XmlMarshallerUnmarshall
 			
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			marshaller.marshal(newObj,repoFile);
-		//	marshaller.mar
 		}catch (JAXBException e) {
+			System.out.println("Exception occured :"+e.getMessage());
 			return false;
 		}
 		
@@ -49,7 +49,6 @@ public class XmlMarshallerUnmarshallerImpl<T> implements XmlMarshallerUnmarshall
 		
 		JAXBContext context = JAXBContext.newInstance(clazz);
 		Unmarshaller unmarshaller = context.createUnmarshaller();
-		
 		return unmarshaller.unmarshal(repoFile);
 	}
 	

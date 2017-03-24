@@ -11,6 +11,7 @@ public class FileFactory {
 			
 	private File candidateRepoFile;
 	private File testRepoFile;
+	private File scheduleRepoFile;
 	
 	private static FileFactory instance;
 	
@@ -45,6 +46,16 @@ public class FileFactory {
 		this.testRepoFile = testRepoFile;
 		log.info("TEST REPO FILE LOADED");
 	}
+
+	public File getScheduleRepoFile() {
+		return scheduleRepoFile;
+	}
+
+	public void setScheduleRepoFile(File scheduleRepoFile) {
+		this.scheduleRepoFile = scheduleRepoFile;
+		log.info("SCHEDULE REPO FILE LOADED");
+	}
+
 	
 	
 		

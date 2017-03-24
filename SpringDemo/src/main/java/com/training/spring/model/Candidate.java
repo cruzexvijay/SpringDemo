@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
@@ -22,9 +23,8 @@ public @Data class Candidate {
 	private @NonNull String candidateId;
 	private @NonNull String firstName;
 	private @NonNull String lastName;
-	private @NonNull String emailId;
+	private String emailId;
 	private @NonNull String contactNumber;
-	
 	//public List<Test> testList=new LinkedList();
 	
 	@Override

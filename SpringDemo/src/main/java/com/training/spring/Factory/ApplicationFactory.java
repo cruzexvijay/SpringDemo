@@ -13,13 +13,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.training.spring.config.AppConfig;
 import com.training.spring.service.CandidateService;
+import com.training.spring.service.ScheduleService;
 import com.training.spring.service.TestService;
 
 public class ApplicationFactory {
 
 	private static ApplicationFactory factoryInstance;
 	private ApplicationContext appContext;
-
 	
 	private static final Log log = LogFactory.getLog(ApplicationFactory.class);
 		
@@ -58,12 +58,13 @@ public class ApplicationFactory {
 			
 			filePath = properties.getProperty("TestRepositoryFilePath");
 			fac.setTestRepoFile(new File(filePath));
+		
+			filePath = properties.getProperty("ScheduleRepositoryFilePath");
+			fac.setScheduleRepoFile(new File(filePath));
+			
 			
 			log.info("LOADING BEAN CONTEXT :");
-			
 			appContext = new AnnotationConfigApplicationContext(AppConfig.class);
-			
-			
 			log.info("LOADED BEAN CONTEXT");
 			
 		} catch (FileNotFoundException e) {
@@ -74,12 +75,16 @@ public class ApplicationFactory {
 	}
 		
 	public CandidateService getCandidateService(){
-		CandidateService service =  appContext.getBean("candidateService",CandidateService.class);
-		return service;
+		return appContext.getBean("candidateService",CandidateService.class);
+		//return service;
 	}
 	
 	public TestService getTestService(){
 		return appContext.getBean("testService",TestService.class);
+	}
+	
+	public ScheduleService getScheduleService(){
+		return appContext.getBean("scheduleService",ScheduleService.class);
 	}
 	
 }

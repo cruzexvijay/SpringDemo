@@ -1,4 +1,4 @@
-var app = angular.module("myApp", []);
+var app = angular.module("myApp", ["ngResource"]);
 
 app.controller("modController", function($scope) {
 	var names = [ 'candidate1', 'emp1' ];
@@ -34,10 +34,14 @@ app.controller("candidateInfoController", function($scope) {
 	});
 });
 
-app.controller("upNextController", function($scope) {
+app.controller("upNextController", function($scope,CandidateFactory) {
 	console.log("fetching data..");
 	$scope.val = "Hi";
-
+	$scope.content = [];
+	CandidateFactory.query(function(data){
+		console.log(data);
+		$scope.content.push(data);
+	});
 });
 
 app.controller("showMsgController", function($q, $scope, $http,
@@ -75,5 +79,9 @@ app.controller("completedController", function($scope) {
 
 	$scope.schedules = [ person1, person2 ];
 
+});
+
+app.factory("CandidateFactory",function($resource){
+	return $resource("http://localhost:8080/WebService/rest/Candidate/showAll");
 });
 

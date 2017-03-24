@@ -56,15 +56,23 @@ public class TestFileRepositoryImpl implements TestRepository {
 	@Override
 	public boolean create(Test newTest) throws IOException, JAXBException {
 		
-		System.out.println("testRepo :"+testRepoFile);
-		
+	//	System.out.println("testRepo :"+testRepoFile);
+				
 		if(!testRepoFile.exists())
 			testRepoFile.createNewFile();
 		
-		if(search(newTest.getTestId())!=null)
-			return false;
+	//	System.out.println(newTest);
 		
-		tests.getTestList().add(newTest);
+		if(newTest.getTestId()==null || newTest.getTestId()==""){
+			newTest.setTestId(tests.getRowId()+""); //create a new row id
+			//System.out.println(newTest.getTestId());
+		}
+		
+		if(search(newTest)!=null){
+			return false;
+		}
+						
+		tests.addNewTest(newTest);
 		
 		return testsXmlMarshallerUnmarshaller.marshalObjectstoXml(tests, Tests.class,testRepoFile);
 	}
@@ -87,7 +95,9 @@ public class TestFileRepositoryImpl implements TestRepository {
 	}
 
 	@Override
-	public Test search(String testId) throws JAXBException {
+	public Test search(Test newTest) throws JAXBException {
+		
+		//System.out.println("search : "+newTest);
 		
 		List<Test> testList = getAllTests();
 		
@@ -97,7 +107,7 @@ public class TestFileRepositoryImpl implements TestRepository {
 			return null;
 		
 		for(Test t : testList){
-			if(t.getTestId().equals(testId)){
+			if(t.getTestId().equals(newTest.getTestId())||t.equals(newTest)){
 				result = t;
 				break;
 			}
@@ -105,6 +115,13 @@ public class TestFileRepositoryImpl implements TestRepository {
 		
 		return result;
 	}
+
+	@Override
+	public Test findById(String testId) throws JAXBException {
+		return search(Test.builder().testId(testId).build());
+		
+	}
+	
 	
 	
 	
