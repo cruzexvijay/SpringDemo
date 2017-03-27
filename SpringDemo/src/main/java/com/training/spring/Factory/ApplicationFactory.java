@@ -60,6 +60,8 @@ public class ApplicationFactory {
 			fac.setTestRepoFile(new File(filePath));
 		
 			filePath = properties.getProperty("ScheduleRepositoryFilePath");
+			log.info("SCHEDULE REPO FILE "+filePath);
+			
 			fac.setScheduleRepoFile(new File(filePath));
 			
 			

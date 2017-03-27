@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.training.spring.XmlUtil.XmlMarshallerUnmarshaller;
 import com.training.spring.model.Schedule;
 import com.training.spring.model.Schedules;
+import com.training.spring.model.Test;
 
 public class ScheduleFileRepositoryImpl implements ScheduleRepository {
 	
@@ -34,26 +35,20 @@ public class ScheduleFileRepositoryImpl implements ScheduleRepository {
 		if(!scheduleRepoFile.exists())
 			scheduleRepoFile.createNewFile();
 
-		System.out.println("Createing new Schedule");
-		System.out.println(newSchedule);
+		Schedule s = searchSchedule(newSchedule);
 		
-		if(newSchedule.getId()==null || newSchedule.getId()==""){
-			//System.out.println("No id found; setting one");
-			newSchedule.setId(schedules.getRowId()+"");
-			//System.out.println(newSchedule.getId());
-			
-		}
-		
-		if(searchSchedule(newSchedule)!=null){
-			//System.out.println("already exists");
+		if(s!=null){
+			//System.out.println("Object already exists. returning");
 			return false;
+		}
+
+		if(newSchedule.getId()==null || newSchedule.getId()==""){
+			newSchedule.setId(schedules.getRowId()+"");
 		}
 
 		schedules.addNewSchedule(newSchedule);
 		
-		boolean val =  scheduleXmlMarshallerUnmarshaller.marshalObjectstoXml(schedules, Schedules.class, scheduleRepoFile);
-		System.out.println("values : "+val);
-		return val;
+		return scheduleXmlMarshallerUnmarshaller.marshalObjectstoXml(schedules, Schedules.class, scheduleRepoFile);
 	}
 	
 	/* (non-Javadoc)
@@ -84,26 +79,75 @@ public class ScheduleFileRepositoryImpl implements ScheduleRepository {
 	}
 	
 	@Override
-	public Schedule searchSchedule(Schedule newSchedule){
+	public Schedule searchSchedule(Schedule newSchedule) throws JAXBException{
 		
-		List<Schedule> list =  getAllSchedules();
+		List<Schedule> scheduleList = findAllSchedules();
+		
 		Schedule result = null;
 		
-		if(list==null){
-			//System.out.println("empty list");
+		if(scheduleList==null)
 			return null;
-		}
 		
-		for(Schedule s : list){
-			if(s.getId().equals(newSchedule.getId()) || s.equals(newSchedule)){
-				System.out.println("already exists");
+		for(Schedule s : scheduleList){
+			
+			if(s.getId().equals(newSchedule.getId())||s.equals(newSchedule)){
 				result = s;
 				break;
-			}		
+			}
 		}
 		
 		return result;
 	}
+	
+	/*private boolean checkEquals(Schedule t, Schedule newSchedule) {
+		boolean result = false;
+		
+		System.out.println("calling check equals");
+		
+		if(t!=null &&  newSchedule!=null){
+			
+			if(t.getCandidateId()!=null && newSchedule.getCandidateId()!=null){
+				
+				if(t.getCandidateId().equals(newSchedule.getCandidateId())){
+					
+					System.out.println("candidate Id id equal");
+					if(t.getDate() != null && newSchedule.getDate() != null){
+						
+						int val = t.getDate().compareTo(newSchedule.getDate());
+						
+						if(val==0){
+							
+							System.out.println("date is equal");
+							System.out.println(t.getDate().getTime());
+							System.out.println(newSchedule.getDate().getTime());
+							
+							if(t.getLocation()!=null && newSchedule.getLocation()!=null){
+								
+								if(t.getLocation().equals(newSchedule.getLocation())){
+									
+									System.out.println("location is equal");
+									result = true;
+								}
+								
+							}
+							
+						}else{
+							System.out.println("date is not equal"+val);
+							System.out.println(t.getDate().getTime());
+							System.out.println(newSchedule.getDate().getTime());
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		return result;
+	}
+*/
 	
 	/* (non-Javadoc)
 	 * @see com.training.spring.repository.ScheduleFileRepository#findCandidateSchedules(java.lang.String)
@@ -116,6 +160,7 @@ public class ScheduleFileRepositoryImpl implements ScheduleRepository {
 		
 		if(list==null)
 			return null;
+	
 		
 		for(Schedule s : list){
 			if(s.getCandidateId().equals(candidateId))
@@ -129,16 +174,16 @@ public class ScheduleFileRepositoryImpl implements ScheduleRepository {
 	 * @see com.training.spring.repository.ScheduleFileRepository#filterSchedulesByDate(java.util.Date)
 	 */
 	@Override
-	public List<Schedule> filterSchedulesByDate(Date currentDate){
+	public List<Schedule> filterSchedulesByDate(long currentDate){
 		List<Schedule> list = getAllSchedules();
 		
 		if(list==null)
 			return null;
 	
-		List<Schedule> filteredList = new ArrayList();
+		List<Schedule> filteredList = new ArrayList<Schedule>();
 		
 		for(Schedule s : list){
-			if(s.getDate().equals(currentDate))
+			if(s.getDate()==currentDate)
 				filteredList.add(s);
 			
 		}

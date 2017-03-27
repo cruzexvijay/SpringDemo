@@ -1,17 +1,19 @@
 package com.training.ws.core;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.Properties;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.training.spring.Factory.ApplicationFactory;
-import com.training.spring.model.Candidate;
-import com.training.spring.model.Test;
 
 public class Application {
 	
+	
+	private static Log log = LogFactory.getLog(Application.class);
 	
 	private InputStream in;
 	
@@ -31,11 +33,28 @@ public class Application {
 	}
 	
 	public InputStream getPropertyStream() throws IOException{
+		
+		/*in =  loadPropertyFile();
+		
+		System.out.println(in);
+		
+		Properties p = new Properties();
+		
+		p.load(in);
+		log.info(p.keySet());
+		
+		log.info("config loaded : "+p.size());
+		*/
 		return loadPropertyFile();
 	}
 	
 	public InputStream loadPropertyFile() throws IOException{
-		return in = new FileInputStream("D:\\Spring Workspace\\WebService\\appConfig.properties");
+		//InputStream in = this.getClass().getClassLoader().getResourceAsStream("appConfig.properties");
+				
+		InputStream in = new FileInputStream("C:\\Users\\590834\\git\\WebService\\appConfig.properties");
+		log.info(in);
+		//return new FileInputStream("..\\appConfig.properties");
+		return in;
 	}
 	
 	public ApplicationFactory getFactoryInstance() throws IOException{

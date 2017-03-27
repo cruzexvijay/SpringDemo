@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.PropertyResourceBundle;
@@ -96,13 +97,18 @@ public class Application {
 	private static List<Schedule> createDummySchedule(){
 		List<Schedule> list = new ArrayList<>();
 		
-		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").date(new Date()).build();
+		Calendar c = Calendar.getInstance();
+		c.set(2017, 3, 27, 12, 30,00);
+		
+		long date = new Date(2017, 3, 27, 12, 30, 0).getTime();
+		
+		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").date(date).build();
 		list.add(newSchedule);
 		
-		newSchedule = Schedule.builder().candidateId("2").Location("CHN").date(new Date()).build();
+		newSchedule = Schedule.builder().candidateId("2").Location("CHN").date(date).build();
 		list.add(newSchedule);
 		
-		newSchedule = Schedule.builder().candidateId("3").Location("MBP").date(new Date()).build();
+		newSchedule = Schedule.builder().candidateId("3").Location("MBP").date(date).build();
 		list.add(newSchedule);
 		
 		return list;

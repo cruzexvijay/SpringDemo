@@ -19,7 +19,6 @@ public class Schedules {
 	
 	private static Schedules instance = new Schedules();
 	
-	@XmlElement(required=false)
 	private int LAST_ROW_ID;
 	
 	private Schedules(){

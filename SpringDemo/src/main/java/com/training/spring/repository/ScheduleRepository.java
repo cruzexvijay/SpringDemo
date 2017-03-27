@@ -16,10 +16,10 @@ public interface ScheduleRepository {
 
 	List<Schedule> findCandidateSchedules(String candidateId);
 
-	List<Schedule> filterSchedulesByDate(Date currentDate);
-
 	Schedule searchSchedule(Schedule newSchedule) throws JAXBException;
 
 	Schedule findScheduleById(String scheduleId) throws JAXBException;
+
+	List<Schedule> filterSchedulesByDate(long currentDate);
 
 }

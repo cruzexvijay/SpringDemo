@@ -18,6 +18,6 @@ public interface ScheduleService {
 
 	List<Schedule> findCandidateSchedules(String candidateId);
 
-	List<Schedule> filterSchedulesByDate(Date currentDate);
+	List<Schedule> filterSchedulesByDate(long currentDate);
 
 }

@@ -37,7 +37,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public List<Schedule> filterSchedulesByDate(Date currentDate) {
+	public List<Schedule> filterSchedulesByDate(long currentDate) {
 		return scheduleRepository.filterSchedulesByDate(currentDate);
 	}
 
