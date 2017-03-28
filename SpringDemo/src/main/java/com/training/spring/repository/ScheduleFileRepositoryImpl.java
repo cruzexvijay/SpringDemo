@@ -2,6 +2,8 @@ package com.training.spring.repository;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -174,7 +176,7 @@ public class ScheduleFileRepositoryImpl implements ScheduleRepository {
 	 * @see com.training.spring.repository.ScheduleFileRepository#filterSchedulesByDate(java.util.Date)
 	 */
 	@Override
-	public List<Schedule> filterSchedulesByDate(long currentDate){
+	public List<Schedule> filterSchedulesByDate(Date currentDate) throws ParseException{
 		List<Schedule> list = getAllSchedules();
 		
 		if(list==null)
@@ -182,8 +184,12 @@ public class ScheduleFileRepositoryImpl implements ScheduleRepository {
 	
 		List<Schedule> filteredList = new ArrayList<Schedule>();
 		
+		Date d = null;
+		
 		for(Schedule s : list){
-			if(s.getDate()==currentDate)
+			
+			d = new SimpleDateFormat("yyyyMMdd hhmmssa").parse(s.getDateTime());
+			if(d.equals(currentDate))
 				filteredList.add(s);
 			
 		}

@@ -7,10 +7,12 @@
 <link rel="stylesheet" href="css/app.css">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="js/angular.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.6.3/angular-resource.js"></script>
-<script
+	<script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="js/angular.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.6.3/angular-resource.js"></script>
+	<script src="https://rawgit.com/dwmkerr/angular-modal-service/master/dst/angular-modal-service.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
 
 </head>
@@ -86,9 +88,10 @@
 					<div class="row">
 						<h2 class="lead text-left">
 							Today <span class="">
-
+								<div ng-controller="newCandidateController">
 								<button type="button" class="btn btn-success pull-right"
-									id="newTestbtn">New Test</button>
+									id="newTestbtn" ng-click="show()">New Test</button>
+								</div>
 							</span>
 						</h2>
 
@@ -203,9 +206,9 @@
 
 									</div>
 
-								
+
 									<div class="row">
-										
+
 										<div class="" ng-controller="showMsgController">
 											<div class="list-group" ng-repeat="c in candidates">
 												<div class="list-group-item">
@@ -218,15 +221,12 @@
 									<div class="row">
 										<div class="well" ng-controller="upNextController">
 											<ul>
-												<li ng-repeat="ck in content">{{ck}}</li>
+												<li ng-repeat="ck in upNext">{{ck}}</li>
 											</ul>
 										</div>
 									</div>
 								</div>
 							</div>
-
-
-
 						</div>
 					</div>
 					<!-- End of row -->
@@ -235,6 +235,7 @@
 			</div>
 		</div>
 	</div>
+
 	<!--/row-offcanvas -->
 </body>
 </html>

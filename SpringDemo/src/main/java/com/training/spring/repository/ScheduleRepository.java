@@ -1,6 +1,7 @@
 package com.training.spring.repository;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,6 @@ public interface ScheduleRepository {
 
 	Schedule findScheduleById(String scheduleId) throws JAXBException;
 
-	List<Schedule> filterSchedulesByDate(long currentDate);
+	List<Schedule> filterSchedulesByDate(Date currentDate) throws ParseException;
 
 }

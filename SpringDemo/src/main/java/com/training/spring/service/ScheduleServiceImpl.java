@@ -1,6 +1,7 @@
 package com.training.spring.service;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 	}
 
 	@Override
-	public List<Schedule> filterSchedulesByDate(long currentDate) {
+	public List<Schedule> filterSchedulesByDate(Date currentDate) throws ParseException {
 		return scheduleRepository.filterSchedulesByDate(currentDate);
 	}
 

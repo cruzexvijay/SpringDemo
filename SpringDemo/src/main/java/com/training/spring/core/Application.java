@@ -97,18 +97,15 @@ public class Application {
 	private static List<Schedule> createDummySchedule(){
 		List<Schedule> list = new ArrayList<>();
 		
-		Calendar c = Calendar.getInstance();
-		c.set(2017, 3, 27, 12, 30,00);
+		String date = "20170327123000pm";
 		
-		long date = new Date(2017, 3, 27, 12, 30, 0).getTime();
-		
-		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").date(date).build();
+		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").dateTime(date).build();
 		list.add(newSchedule);
 		
-		newSchedule = Schedule.builder().candidateId("2").Location("CHN").date(date).build();
+		newSchedule = Schedule.builder().candidateId("2").Location("CHN").dateTime(date).build();
 		list.add(newSchedule);
 		
-		newSchedule = Schedule.builder().candidateId("3").Location("MBP").date(date).build();
+		newSchedule = Schedule.builder().candidateId("3").Location("MBP").dateTime(date).build();
 		list.add(newSchedule);
 		
 		return list;

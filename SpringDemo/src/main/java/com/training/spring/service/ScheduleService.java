@@ -1,6 +1,7 @@
 package com.training.spring.service;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,6 @@ public interface ScheduleService {
 
 	List<Schedule> findCandidateSchedules(String candidateId);
 
-	List<Schedule> filterSchedulesByDate(long currentDate);
+	List<Schedule> filterSchedulesByDate(Date currentDate) throws ParseException;
 
 }

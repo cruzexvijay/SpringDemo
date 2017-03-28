@@ -17,5 +17,7 @@ public interface CandidateRepository {
 	boolean create(Candidate newCandidate) throws IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException, JAXBException;
 
 	Candidate search(Candidate newCandidate) throws JAXBException;
+	
+	Candidate search(String candidateId)throws JAXBException;
 
 }

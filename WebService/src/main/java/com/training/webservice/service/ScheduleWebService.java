@@ -1,6 +1,8 @@
 package com.training.webservice.service;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +11,10 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
 
@@ -37,6 +43,7 @@ public class ScheduleWebService {
 
 	public void populate() throws IOException, JAXBException {
 		for (Schedule s : createDummySchedule()) {
+			log.info("date set : "+s.getDateTime());
 			scheduleService.create(s);
 		}
 	}
@@ -46,7 +53,7 @@ public class ScheduleWebService {
 	public Response showMsg() {
 		return Response.status(200).entity("Welcome").build();
 	}
-
+/*
 	@GET
 	@Path("/all")
 	public Response getAllSchedules() throws JAXBException, IOException {
@@ -61,22 +68,48 @@ public class ScheduleWebService {
 
 		return Response.status(200).entity(s).build();
 	}
-
+*/
 	@GET
-	@Path("/upcoming")
-	public Response getUpComingSchedules() throws JAXBException {
-
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUpComingSchedules(@QueryParam("q") String filter) throws JAXBException, ParseException {
+				
 		List<Schedule> list = new LinkedList<>();
 		Date currentDate = new Date();
 		
-		log.info("Current Date :"+currentDate+" in ms :"+currentDate.getTime());
-
+		if(filter==null){
+			filter = "none";
+		}
+	
+		filter = filter.toLowerCase();
+		
+		Date d = null;
 		for (Schedule s : scheduleService.findAllSchedules()) {
-			log.info("List Date : "+new Date(s.getDate()));
-			if(s.getDate()>currentDate.getTime()){
+			
+			d = new SimpleDateFormat("yyyyMMddhhmmssa").parse(s.getDateTime());
+		
+			switch(filter){
+			case "upcoming":
+				if(currentDate.getTime() < d.getTime()){
+					list.add(s);
+				}
+				break;
+			case "completed":
+				if(currentDate.getTime() > d.getTime()){
+					list.add(s);
+				}
+				break;
+			case "ongoing":
+				if((currentDate.getTime() - 3600000)<=d.getTime()){
+					list.add(s);
+				}
+				break;
+			case "none":
 				list.add(s);
-				
+				break;
 			}
+			
+				
 		}
 
 		String response = new Gson().toJson(list);
@@ -88,29 +121,24 @@ public class ScheduleWebService {
 	private static List<Schedule> createDummySchedule() {
 		List<Schedule> list = new ArrayList<>();
 		
-	
-		Date d = setCalendar(2017, 03, 27, 12, 30, 00,Calendar.AM_PM).getTime();
+		String date = "20170327123000PM";
 		
-		long date = d.getTime();
-		
-		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").date(date).build();
+		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").dateTime(date).build();
 		list.add(newSchedule);
 
-		newSchedule = Schedule.builder().candidateId("2").Location("CHN").date(date).build();
+		newSchedule = Schedule.builder().candidateId("2").Location("CHN").dateTime(date).build();
 		list.add(newSchedule);
 
-		newSchedule = Schedule.builder().candidateId("3").Location("MBP").date(date).build();
+		newSchedule = Schedule.builder().candidateId("3").Location("MBP").dateTime(date).build();
 		list.add(newSchedule);
 		
-		d = setCalendar(2010, 03, 27, 12, 30, 00,Calendar.AM_PM).getTime();
+		date = "20100327123000PM";
 		
-		date = d.getTime();
-		
-		newSchedule = Schedule.builder().candidateId("2").Location("CHN").date(date).build();
+		newSchedule = Schedule.builder().candidateId("2").Location("CHN").dateTime(date).build();
 		//log.info("DATE : "+newSchedule.getDate().getTime());
 		list.add(newSchedule);
 
-		newSchedule = Schedule.builder().candidateId("3").Location("MBP").date(date).build();
+		newSchedule = Schedule.builder().candidateId("3").Location("MBP").dateTime(date).build();
 		list.add(newSchedule);
 
 		return list;

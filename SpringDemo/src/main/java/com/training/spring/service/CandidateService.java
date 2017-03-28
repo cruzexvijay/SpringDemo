@@ -18,4 +18,5 @@ public interface CandidateService {
 	
 	Candidate search(Candidate newCandidate) throws JAXBException;
 
+	Candidate search(String candidateId)throws JAXBException;
 }

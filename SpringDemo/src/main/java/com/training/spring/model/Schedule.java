@@ -1,7 +1,5 @@
 package com.training.spring.model;
 
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,13 +16,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @XmlRootElement(name="schedule")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = {"Id","candidateId","Location","date"})
+@XmlType(propOrder = {"Id","candidateId","Location","dateTime"})
 @EqualsAndHashCode(exclude={"Id"})
 public @Data class Schedule {
 
 	private String Id;
 	private String candidateId;
 	private String Location;
-	private long date;
+	private String dateTime;
 	
 }

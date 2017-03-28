@@ -89,6 +89,25 @@ public class CandidateFileRepositoryImpl implements CandidateRepository {
 		return result;
 	}
 
+	@Override
+	public Candidate search(String candidateId) throws JAXBException{
+		
+		Candidate result = null;
+		
+		List<Candidate> candidateList = findAll();
+		
+		if(candidateList==null)
+			return null;
+		
+		for(Candidate c : candidateList){	
+			if(c.getCandidateId().equals(candidateId)){
+				result = c;
+				break;
+			}	
+		}
+				
+		return result;
+	}
 	
 	
 	

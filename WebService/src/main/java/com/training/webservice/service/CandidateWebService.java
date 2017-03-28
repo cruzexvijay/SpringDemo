@@ -24,33 +24,42 @@ import com.training.spring.service.CandidateService;
 import com.training.spring.service.TestService;
 import com.training.ws.core.Application;
 
-@Path("/Candidate")
+@Path("/candidate")
 public class CandidateWebService {
 	
 	private ApplicationFactory factory;
+	private CandidateService service;
 	
-	public CandidateWebService() throws IOException {
+	public CandidateWebService() throws IOException, TransformerConfigurationException, ParserConfigurationException, TransformerException, JAXBException {
 		factory = Application.getInstance().getFactoryInstance();
+		service = factory.getCandidateService();
+		
+		for (Candidate c : createDummyCandidates()) {
+			service.create(c);
+		}
+
 	}
 
 	@GET
 	@Path("/{candidateId}")
-	public Response getCandidateDetails(@PathParam("candidateId") String candidateId) {
-		String candidate = "Hi There! " + candidateId;
-
-		return Response.status(200).entity(candidate).build();
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCandidateDetails(@PathParam("candidateId") String candidateId) throws JAXBException {
+		
+		Candidate c  = service.search(candidateId);
+		Gson gson = new Gson();
+		String response = "[]";
+		if(c!=null){
+			response = gson.toJson(c);
+		}
+		
+		return Response.status(200).entity(response).build();
 	}
 
 	@GET
-	@Path("/showAll")
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllCandidates() throws JAXBException, IOException, TransformerConfigurationException,
 			ParserConfigurationException, TransformerException {
-
-		CandidateService service = factory.getCandidateService();
-
-		for (Candidate c : createDummyCandidates()) {
-			service.create(c);
-		}
 
 		List<Candidate> list = service.findAll();
 
@@ -61,8 +70,8 @@ public class CandidateWebService {
 
 	@GET
 	@Path("/{candidateId}/test")
-	@Produces(MediaType.APPLICATION_XML)
-	public List<Test> getAllTests(@PathParam("candidateId") String candidateId) throws IOException, JAXBException {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllTests(@PathParam("candidateId") String candidateId) throws IOException, JAXBException {
 
 		TestService service = factory.getTestService();
 
@@ -71,8 +80,9 @@ public class CandidateWebService {
 		for (Test t : createDummyTest()) {
 			service.create(t);
 		}
-
-		return service.getAllCandidateTests(candidateId);
+		List<Test> tests = service.getAllCandidateTests(candidateId);
+		String response = new Gson().toJson(tests);
+		return Response.status(200).entity(response).build();
 	}
 
 	public static List<Test> createDummyTest() {
