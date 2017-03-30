@@ -1,5 +1,9 @@
-body,html,.row-offcanvas{
-	height:100%;
+html{
+  height:100%;	
+}
+body{
+  min-height:100%; 
+  position:relative;
 }
 
 hide{
@@ -8,9 +12,6 @@ hide{
 
 show{
 	display:inline;
-}
-body{
-	padding-top:50px;
 }
 
 #sidebar{
