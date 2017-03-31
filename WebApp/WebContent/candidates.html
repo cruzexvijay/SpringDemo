@@ -81,16 +81,18 @@
 
 		<div class="row">
 			<div class="col-md-8">
-				<div class="box box-info">
+				<div class="box box-info" ng-controller="newScheduleController">
 					<div class="box-header with-border">
 						<h3 class="box-title">Candidates</h3>
 
 						<div class="box-tools pull-right">
 																
 						<input type="text" class="form-inline" placeholder="search" ng-model="cSearch"/>
-						
+						<!-- 
 						<a href="javascript:void(0)"
-							class="btn btn-sm btn-flat btn-info">New</a>
+							class="btn btn-sm btn-flat btn-info">New</a> -->
+							
+							<button type="button" class="btn btn-sm btn-flat btn-info" ng-click="newSchedule()">New</button>
 							<!-- &nbsp;
 							<button type="button" class="btn btn-box-tool"
 								data-widget="collapse">
@@ -118,7 +120,7 @@
 								</thead>
 								<tbody>
 									<tr ng-repeat="candidate in candidates|filter:cSearch">
-										<td><a href="pages/examples/invoice.html">{{candidate.candidateId}}</a></td>
+										<td><a href="" ng-click="show(candidate)">{{candidate.candidateId}}</a></td>
 										<td>{{candidate.firstName+" "+candidate.lastName}}</td>
 										<td>{{candidate.emailId}}</td>
 										<td>
