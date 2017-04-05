@@ -2,27 +2,20 @@ package com.training.spring.core;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 import com.training.spring.Factory.ApplicationFactory;
-import com.training.spring.Factory.FileFactory;
 import com.training.spring.model.Candidate;
 import com.training.spring.model.Schedule;
 import com.training.spring.model.Test;
+import com.training.spring.model.TestMedium;
 import com.training.spring.service.CandidateService;
 import com.training.spring.service.ScheduleService;
 import com.training.spring.service.TestService;
@@ -99,13 +92,13 @@ public class Application {
 		
 		String date = "20170327123000pm";
 		
-		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").dateTime(date).build();
+		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").medium(TestMedium.INPERSON.toString()).dateTime(date).build();
 		list.add(newSchedule);
 		
-		newSchedule = Schedule.builder().candidateId("2").Location("CHN").dateTime(date).build();
+		newSchedule = Schedule.builder().candidateId("2").Location("CHN").dateTime(date).medium(TestMedium.SKYPE.toString()).build();
 		list.add(newSchedule);
 		
-		newSchedule = Schedule.builder().candidateId("3").Location("MBP").dateTime(date).build();
+		newSchedule = Schedule.builder().candidateId("3").Location("MBP").dateTime(date).medium(TestMedium.INPERSON.toString()).build();
 		list.add(newSchedule);
 		
 		return list;

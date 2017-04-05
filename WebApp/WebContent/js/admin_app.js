@@ -63,8 +63,11 @@ app.config(function($stateProvider) {
 });
 
 app.controller("newScheduleController", function($scope, $rootScope,
-		ModalService,MjolnirService) {
+		ModalService, MjolnirService) {
 
+	$scope.schedules = [{date:"1/2/2013",time:{hours:"2",mins:"30",am_pm:"PM"},location:"MBP",medium:"Skype",notes:"This is a very good notes"}];
+	$scope.showToggle = true;
+	
 	$scope.show = function(candidate) {
 		ModalService.showModal({
 			templateUrl : "modal.html",
@@ -73,83 +76,173 @@ app.controller("newScheduleController", function($scope, $rootScope,
 		}).then(function(modal) {
 			modal.element.modal();
 		});
-
+	};
+	
+	$scope.showScheduleForm = function(){
+		
+		console.log("newSchedule");
+		$scope.showToggle=!$scope.showToggle;
 	};
 
-	$scope.newSchedule = function(){
-		
+	$scope.newSchedule = function() {
+
 		ModalService.showModal({
 			templateUrl : "modal.html",
-			controller:"modalController",
-		}).then(function(modal){
+			controller : "modalController",
+		}).then(function(modal) {
 			modal.element.modal();
 		});
-		
+
 		MjolnirService.setModalTitle("New Schedule");
 		MjolnirService.setCandidate(null);
 	};
 
+	$scope.edit = function(schedule){
+		$scope.showToggle=true;
+		console.log("edit");
+		console.log(schedule);
+	};
+	
+	$scope.delete = function(schedule){
+		$scope.showToggle = !$scope.showToggle;
+	};
+	
+	$scope.showNotes = function(schedule){
+		console.log("showing notes");
+		$("p").text(schedule.notes);
+	};
 });
 
-app.service("MjolnirService",function(){
-	var candidate={};
-	var modalTitle="";
-	
-	this.setCandidate = function(value){
+app.service("MjolnirService", function() {
+	var candidate = {};
+	var modalTitle = "";
+
+	this.setCandidate = function(value) {
 		this.candidate = value;
 	},
-	
-	this.getCandidate = function(){
+
+	this.getCandidate = function() {
 		return this.candidate;
 	},
-	
-	this.setModalTitle = function(title){
+
+	this.setModalTitle = function(title) {
 		this.modalTitle = title;
-		//console.log("New title set "+this.modalTitle);
+		// console.log("New title set "+this.modalTitle);
 	},
-	
-	this.getModalTitle = function(){
+
+	this.getModalTitle = function() {
 		return this.modalTitle;
 	}
 });
 
-app.controller("modalController", function($scope,CandidateFactory,MjolnirService) {
-	
+app.controller("modalController", function($scope, ScheduleFactory,
+		CandidateFactory, MjolnirService) {
+
 	console.log("modalcontroller");
 
-	$scope.title = MjolnirService.getModalTitle();	
+	$scope.title = MjolnirService.getModalTitle();
 	$scope.candidate = MjolnirService.getCandidate();
 	$scope.btn_text = "Submit";
-	
-	$scope.isEnabled = false;
-	
-	if($scope.candidate){
-		$scope.isEnabled=true;
+
+	// console.log($scope.candidate);
+
+	if ($scope.candidate) {
+		var id = $scope.candidate.candidateId;
+
+		ScheduleFactory.get({
+			id : id
+		}, function(data) {
+			console.log("getting schedules of candidate");
+			console.log(data);
+		});
 	}
-		
+
+	// var getc = CandidateFactory.get({id:"1"});
+
+	// var getc = ScheduleFactory.query({filter:"completed"});
+	var getc = ScheduleFactory.get({
+		id : "2"
+	});
+
+	console.log("loading");
+	console.log(getc);
+
+	$scope.isEnabled = false;
+
+	if ($scope.candidate) {
+		$scope.isEnabled = true;
+	}
+
 	$scope.close = function(msg) {
 		console.log(msg);
 		MjolnirService.setCandidate(null);
 	}
 
 	$scope.submit = function() {
-		console.log("submitting....");
+		var cand = $scope.candidate;
+		console.log(cand);
 	}
 
-	$scope.edit = function(){
-		$scope.isEnabled=!$scope.isEnabled;
-		$scope.btn_text="Update";
-		console.log("enabling");
+	$scope.edit = function() {
+		$scope.isEnabled = !$scope.isEnabled;
+		$scope.btn_text = "Update";
+		// console.log("enabling");
 	}
+});
+
+app.service("ScheduleService", function(CandidateFactory, ScheduleFactory) {
+
+	this.getEvents = function(filter) {
+
+		console.log("getting events");
+
+		var events = [];
+
+		ScheduleFactory.query({
+			filter : filter
+		}, function(data) {
+			angular.forEach(data, function(event) {
+				CandidateFactory.get({
+					id : event.candidateId
+				}, function(candidate) {
+					var candidateName = candidate.firstName + " "
+							+ candidate.lastName;
+					event.candidateName = candidateName;
+					event.dateTime = new Date(event.dateTime);
+
+					var color = "success";
+
+					if (event.medium == "Skype") {
+						color = "info";
+					}
+
+					event.color = color;
+					events.push(event);
+				});
+			});
+
+		});
+		return events;
+	};
+
+});
+
+app.controller("completedController", function($scope, ScheduleService) {
+	$scope.events = ScheduleService.getEvents("completed");
 });
 
 app.controller("breadCrumbController", function($scope) {
-	console.log("bc controller");
 	$scope.breadCrumbs = [ "Dashboard" ];
 });
 
-app.controller("onGoingController", function($scope) {
-	$scope.events = [ "event1", "event2", "event3" ];
+app.controller("onGoingController", function($scope, ScheduleService) {
+	var events = ScheduleService.getEvents("ongoing");
+	$scope.onGoingEvents = events;
+
+});
+
+app.controller("upComingController", function($scope, ScheduleService) {
+	$scope.upComingEvents = ScheduleService.getEvents("upcoming");
 });
 
 app.controller("dashboardController", function($scope) {
@@ -158,7 +251,7 @@ app.controller("dashboardController", function($scope) {
 });
 
 app.controller("candidateController", function($scope, $rootScope,
-		CandidateFactory, ModalService,MjolnirService) {
+		CandidateFactory, ModalService, MjolnirService) {
 	$scope.candidates = [];
 	// $scope.candidates.push({candidateId:"1234",firstName:"Vijay",lastName:"Kumar",status:"Passed"});
 
@@ -167,14 +260,14 @@ app.controller("candidateController", function($scope, $rootScope,
 	});
 
 	$scope.show = function(candidate) {
-		
+
 		ModalService.showModal({
 			templateUrl : "modal.html",
 			controller : "modalController",
 		}).then(function(modal) {
 			modal.element.modal();
-			modal.closed.then(function(data,val){
-				console.log("closed");
+			modal.closed.then(function(data, val) {
+				// console.log("closed");
 				MjolnirService.setCandidate(null);
 			});
 		});
@@ -185,20 +278,68 @@ app.controller("candidateController", function($scope, $rootScope,
 
 });
 
+var resourceErrorHandler = function(response) {
+	console.log("error in response");
+	console.log(response.data);
+}
+
 app.factory("CandidateFactory", function($resource) {
 	return $resource("http://localhost:8080/WebService/rest/", {}, {
 		query : {
 			method : "GET",
 			url : "http://localhost:8080/WebService/rest/candidate/all",
 			isArray : true,
+			interceptor : {
+				responseError : resourceErrorHandler
+			}
 		},
 		get : {
 			method : "GET",
 			url : "http://localhost:8080/WebService/rest/candidate/:id",
+			interceptor : {
+				responseError : resourceErrorHandler
+			}
 		},
-		create:{
-			method:"POST",
-			url:"http://localhost:8080/WebService/rest/candidate/",
+		save : {
+			method : "POST",
+			url : "http://localhost:8080/WebService/rest/candidate/new",
+			interceptor : {
+				responseError : resourceErrorHandler
+			}
 		}
+	});
+});
+
+app.factory("ScheduleFactory", function($resource) {
+	return $resource("http://localhost:8080/WebService/rest/", {}, {
+		query : {
+			method : "GET",
+			url : "http://localhost:8080/WebService/rest/schedule?q=:filter",
+			isArray : true,
+			param : {
+				filter : '@filter'
+			},
+			interceptor : {
+				responseError : resourceErrorHandler
+			}
+		},
+		get : {
+			method : "GET",
+			url : "http://localhost:8080/WebService/rest/schedule/:id",
+			interceptor : {
+				responseError : resourceErrorHandler
+			}
+		},
+		create : {
+			method : "POST",
+			url : "http://localhost:8080/WebService/rest/schedule/:id/new",
+			param : {
+				id : '@id'
+			},
+			interceptor : {
+				responseError : resourceErrorHandler
+			}
+		}
+
 	});
 });

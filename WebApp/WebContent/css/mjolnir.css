@@ -1,0 +1,9 @@
+.modal-body{
+	position:relative;
+	overflow-y:auto;
+	overflow-x:auto;
+	width:100%;
+	display:table;
+	padding:15px;
+
+}

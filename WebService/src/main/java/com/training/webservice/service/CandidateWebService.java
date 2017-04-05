@@ -1,11 +1,11 @@
 package com.training.webservice.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,9 +19,8 @@ import javax.xml.transform.TransformerException;
 import com.google.gson.Gson;
 import com.training.spring.Factory.ApplicationFactory;
 import com.training.spring.model.Candidate;
-import com.training.spring.model.Test;
 import com.training.spring.service.CandidateService;
-import com.training.spring.service.TestService;
+import com.training.webservice.exceptions.AppException;
 import com.training.ws.core.Application;
 
 @Path("/candidate")
@@ -34,22 +33,37 @@ public class CandidateWebService {
 		factory = Application.getInstance().getFactoryInstance();
 		service = factory.getCandidateService();
 		
-		for (Candidate c : createDummyCandidates()) {
+	/*	for (Candidate c : createDummyCandidates()) {
 			service.create(c);
-		}
+		}*/
 
 	}
+	
+	@POST
+	@Path("/candidate/new")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	public void save(){
+		
+	}
+	
+	
 
 	@GET
 	@Path("/{candidateId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCandidateDetails(@PathParam("candidateId") String candidateId) throws JAXBException {
+	public Response getCandidateDetails(@PathParam("candidateId") String candidateId) throws JAXBException, AppException {
 		
 		Candidate c  = service.search(candidateId);
 		Gson gson = new Gson();
 		String response = "[]";
 		if(c!=null){
 			response = gson.toJson(c);
+		}else{
+			throw AppException.builder().status(Response.Status.NOT_FOUND.getStatusCode())
+			.errorCode(1295)
+			.msg("No candidate found with the given candidate id "+candidateId)
+			.exceptionLink("http://localhost:8080/errors/code=1295")
+			.build();
 		}
 		
 		return Response.status(200).entity(response).build();
@@ -70,22 +84,20 @@ public class CandidateWebService {
 
 	@GET
 	@Path("/{candidateId}/test")
+	public Response getAllTests(@PathParam("candidateId") String candidateId) throws IOException, JAXBException, AppException {
+		System.out.println("Delegating tast to test webservice");
+		return new TestWebService().getAllTests(candidateId);
+	}
+	
+	
+	@GET
+	@Path("/{candidateId}/schedule")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllTests(@PathParam("candidateId") String candidateId) throws IOException, JAXBException {
-
-		TestService service = factory.getTestService();
-
-		System.out.println(service);
-
-		for (Test t : createDummyTest()) {
-			service.create(t);
-		}
-		List<Test> tests = service.getAllCandidateTests(candidateId);
-		String response = new Gson().toJson(tests);
-		return Response.status(200).entity(response).build();
+	public Response getSchedules(@PathParam("candidateId") String candidateId) throws AppException, IOException, JAXBException{
+		return new ScheduleWebService().getCandidateSchedules(candidateId);
 	}
 
-	public static List<Test> createDummyTest() {
+	/*public static List<Test> createDummyTest() {
 		List<Test> testList = new ArrayList<>();
 
 		Test newTest = Test.builder().candidateId("1").testId("1").questionName("cut the sticks")
@@ -120,6 +132,6 @@ public class CandidateWebService {
 		candidateList.add(newCandidate);
 
 		return candidateList;
-	}
+	}*/
 
 }

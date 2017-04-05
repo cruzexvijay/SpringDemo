@@ -159,11 +159,7 @@ public class ScheduleFileRepositoryImpl implements ScheduleRepository {
 		
 		List<Schedule> list = getAllSchedules();
 		List<Schedule> newList = new ArrayList();
-		
-		if(list==null)
-			return null;
-	
-		
+				
 		for(Schedule s : list){
 			if(s.getCandidateId().equals(candidateId))
 				newList.add(s);
@@ -188,7 +184,7 @@ public class ScheduleFileRepositoryImpl implements ScheduleRepository {
 		
 		for(Schedule s : list){
 			
-			d = new SimpleDateFormat("yyyyMMdd hhmmssa").parse(s.getDateTime());
+			d = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a").parse(s.getDateTime());
 			if(d.equals(currentDate))
 				filteredList.add(s);
 			

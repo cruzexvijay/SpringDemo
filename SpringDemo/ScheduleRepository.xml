@@ -36,5 +36,26 @@
         <Location>MBP</Location>
         <dateTime>20170327 123000pm</dateTime>
     </Schedule>
-    <LAST_ROW_ID>6</LAST_ROW_ID>
+    <Schedule>
+        <Id>7</Id>
+        <candidateId>1</candidateId>
+        <Location>MBP</Location>
+        <medium>In Person</medium>
+        <dateTime>20170327123000pm</dateTime>
+    </Schedule>
+    <Schedule>
+        <Id>8</Id>
+        <candidateId>2</candidateId>
+        <Location>CHN</Location>
+        <medium>Skype</medium>
+        <dateTime>20170327123000pm</dateTime>
+    </Schedule>
+    <Schedule>
+        <Id>9</Id>
+        <candidateId>3</candidateId>
+        <Location>MBP</Location>
+        <medium>In Person</medium>
+        <dateTime>20170327123000pm</dateTime>
+    </Schedule>
+    <LAST_ROW_ID>9</LAST_ROW_ID>
 </Schedules>

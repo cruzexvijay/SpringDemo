@@ -1,0 +1,129 @@
+<div class="box-body">
+
+	<div class="form-group">
+		<label for="cName" class="col-sm-2 col-md-2 control-label">First
+			Name</label>
+		<div class="col-sm-4">
+			<input type="text" class="form-control" id="firstName"
+				placeholder="First Name" ng-model="candidate.firstName"
+				ng-disabled="isEnabled" />
+
+		</div>
+
+		<label for="lastName" class="col-sm-2 control-label">Last Name</label>
+		<div class="col-sm-4">
+			<input type="text" class="form-control" id="lastName"
+				placeholder="Last Name" ng-model="candidate.lastName"
+				ng-disabled="isEnabled" />
+		</div>
+
+	</div>
+
+	<div class="form-group">
+
+		<label for="cId" class="col-sm-2 control-label">Candidate Id</label>
+		<div class="col-sm-4">
+			<input type="text" class="form-control" id="cId"
+				placeholder="candidate id" ng-model="candidate.candidateId"
+				ng-disabled="isEnabled" />
+		</div>
+
+
+
+		<label class="col-sm-2 control-label">Contact Number</label>
+
+		<div class="col-sm-4">
+			<input type="text" class="form-control" id="contactNumber"
+				placeholder="contact number" ng-model="candidate.contactNumber"
+				ng-disabled="isEnabled" />
+		</div>
+
+	</div>
+
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Schedule Date</label>
+
+		<div class=" date col-sm-4">
+
+			<input type="text" class="form-control pull-right" id="datepicker"
+				ng-disabled="isEnabled" />
+
+		</div>
+
+
+		<label for="time" class="col-sm-2 control-label">Time</label>
+		<div class="col-sm-4">
+
+			<select class="" id="hours" ng-disabled="isEnabled">
+				<option ng-repeat="i in [1,12]|inRange">{{i}}</option>
+			</select> <select class="" id="mins" ng-disabled="isEnabled">
+
+				<option ng-repeat="i in [00,59]|inRange">{{i}}</option>
+			</select> <select name="am_pm" class="" id="am_pm" ng-disabled="isEnabled">
+				<option id="am">AM</option>
+				<option id="pm">PM</option>
+			</select>
+
+		</div>
+
+
+
+	</div>
+
+	<div class="form-group">
+
+		<label for="emailId" class="col-sm-2 control-label">Candidate
+			Email</label>
+
+		<div class="col-sm-4">
+			<input type="email" class="form-control" id="emailId"
+				placeholder="Email" ng-model="candidate.emailId"
+				ng-disabled="isEnabled" />
+		</div>
+
+		<label for="location" class="col-sm-2 control-label">Location</label>
+
+		<div class="col-sm-4">
+			<input type="text" id="location" class="form-control"
+				placeholder="location" ng-disabled="isEnabled" />
+		</div>
+
+
+	</div>
+
+	<div class="form-group">
+	
+			<label for="location" class="col-sm-2 control-label">Location</label>
+
+		<div class="col-sm-4">
+			<input type="text" id="location" class="form-control"
+				placeholder="location" ng-disabled="isEnabled" />
+		</div>
+			
+
+		<!-- 
+									<div class="col-sm-4"> -->
+		<label for="medium" class="col-sm-2 control-label">Medium</label>
+		<div class="col-sm-4">
+			<select name="medium" class="form-control" id="medium"
+				ng-disabled="isEnabled">
+				<option id="in_person" value="in_person">In Person</option>
+				<option id="skype" value="skype">Skype</option>
+			</select>
+		</div>
+		<!-- </div>
+									 -->
+	</div>
+
+</div>
+<!-- /.box-body -->
+<div class="box-footer">
+	<button type="button" class="btn btn-default" data-dismiss="modal"
+		ng-click="close('cancel')">Cancel</button>
+	<button type="button" class="btn btn-info" ng-click="edit()"
+		ng-disabled="!isEnabled">Edit</button>
+
+	<button type="button" class="btn btn-success pull-right"
+		ng-click="submit()" ng-disabled="isEnabled">{{btn_text}}</button>
+</div>

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +23,9 @@ import org.apache.commons.logging.LogFactory;
 import com.google.gson.Gson;
 import com.training.spring.Factory.ApplicationFactory;
 import com.training.spring.model.Schedule;
+import com.training.spring.model.TestMedium;
 import com.training.spring.service.ScheduleService;
+import com.training.webservice.exceptions.AppException;
 import com.training.ws.core.Application;
 
 @Path("/schedule")
@@ -38,7 +39,7 @@ public class ScheduleWebService {
 		factory = Application.getInstance().getFactoryInstance();
 		scheduleService = factory.getScheduleService();
 		// log.info("Schedule web service");
-		populate();
+		//populate();
 	}
 
 	public void populate() throws IOException, JAXBException {
@@ -53,40 +54,35 @@ public class ScheduleWebService {
 	public Response showMsg() {
 		return Response.status(200).entity("Welcome").build();
 	}
-/*
+
+	
 	@GET
-	@Path("/all")
-	public Response getAllSchedules() throws JAXBException, IOException {
-
-		List<Schedule> list = scheduleService.findAllSchedules();
-
-		log.info("SCHEDULES : " + list.size());
-
-		Gson son = new Gson();
-
-		String s = son.toJson(list);
-
-		return Response.status(200).entity(s).build();
-	}
-*/
-	@GET
-	@Path("/all")
+	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUpComingSchedules(@QueryParam("q") String filter) throws JAXBException, ParseException {
+	public Response getUpComingSchedules(@QueryParam("q") String filter) throws JAXBException, ParseException, AppException {
 				
 		List<Schedule> list = new LinkedList<>();
+		List<Schedule> schedules = scheduleService.findAllSchedules();
 		Date currentDate = new Date();
 		
-		if(filter==null){
+		if(filter==null||filter.equals("all")){
 			filter = "none";
+		}
+		
+		if(schedules==null || schedules.isEmpty()){
+			throw AppException.builder().status(Response.Status.NOT_FOUND.getStatusCode())
+			.errorCode(1295)
+			.exceptionLink("http://localhost:8080/error?q=1295")
+			.msg("No schedules found")
+			.build();
 		}
 	
 		filter = filter.toLowerCase();
-		
+				
 		Date d = null;
-		for (Schedule s : scheduleService.findAllSchedules()) {
+		for (Schedule s : schedules) {
 			
-			d = new SimpleDateFormat("yyyyMMddhhmmssa").parse(s.getDateTime());
+			d = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a").parse(s.getDateTime());
 		
 			switch(filter){
 			case "upcoming":
@@ -107,6 +103,7 @@ public class ScheduleWebService {
 			case "none":
 				list.add(s);
 				break;
+			
 			}
 			
 				
@@ -117,44 +114,54 @@ public class ScheduleWebService {
 	}
 	
 	
+	@GET
+	@Path("/{candidateId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCandidateSchedules(@PathParam("candidateId") String candidateId) throws AppException{
+		log.info("FINDING CANDIDATE SCHEDULES");
+		
+		List<Schedule> schedules = scheduleService.findCandidateSchedules(candidateId);
+		
+		if(schedules==null || schedules.isEmpty()){
+			System.out.println("list is empty");
+			throw AppException.builder().status(Response.Status.NOT_FOUND.getStatusCode())
+			.errorCode(1295)
+			.exceptionLink("http://localhost:8080/errors?code=1295")
+			.msg("No schedules found for the selected candidate")
+			.build();
+		}
+			
+			return Response.status(200).entity(new Gson().toJson(schedules)).build();
+		
+	}
+	
+	
 
 	private static List<Schedule> createDummySchedule() {
 		List<Schedule> list = new ArrayList<>();
 		
-		String date = "20170327123000PM";
+		String date = "2017-03-27 12:30:00 PM";
 		
-		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").dateTime(date).build();
+		Schedule newSchedule = Schedule.builder().candidateId("1").Location("MBP").dateTime(date).medium(TestMedium.INPERSON.toString()).build();
 		list.add(newSchedule);
 
-		newSchedule = Schedule.builder().candidateId("2").Location("CHN").dateTime(date).build();
+		newSchedule = Schedule.builder().candidateId("2").Location("CHN").dateTime(date).medium(TestMedium.SKYPE.toString()).build();
 		list.add(newSchedule);
 
-		newSchedule = Schedule.builder().candidateId("3").Location("MBP").dateTime(date).build();
+		newSchedule = Schedule.builder().candidateId("3").Location("MBP").dateTime(date).medium(TestMedium.INPERSON.toString()).build();
 		list.add(newSchedule);
 		
-		date = "20100327123000PM";
+		date = "2010-03-27 12:30:00 PM";
 		
-		newSchedule = Schedule.builder().candidateId("2").Location("CHN").dateTime(date).build();
+		newSchedule = Schedule.builder().candidateId("2").Location("CHN").dateTime(date).medium(TestMedium.SKYPE.toString()).build();
 		//log.info("DATE : "+newSchedule.getDate().getTime());
 		list.add(newSchedule);
 
-		newSchedule = Schedule.builder().candidateId("3").Location("MBP").dateTime(date).build();
+		newSchedule = Schedule.builder().candidateId("3").Location("MBP").dateTime(date).medium(TestMedium.INPERSON.toString()).build();
 		list.add(newSchedule);
 
 		return list;
 	}
 	
-	private static Calendar setCalendar(int year,int month,int date,int hours,int mins,int seconds,int AMPM){
-		Calendar c = Calendar.getInstance();
-		c.set(Calendar.YEAR, year);
-		c.set(Calendar.MONTH,month);
-		c.set(Calendar.DATE, (date));
-		c.set(Calendar.HOUR,(hours));
-		c.set(Calendar.MINUTE, mins);
-		c.set(Calendar.SECOND, seconds);
-		c.set(Calendar.AM_PM, AMPM);
-		
-		return c;
-	}
 
 }
